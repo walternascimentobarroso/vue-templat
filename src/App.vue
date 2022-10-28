@@ -37,15 +37,9 @@ export default {
 
   created() {
     this.loading = true;
-    setInterval(() => {
-      axios
-        .get("http://localhost:3000/todos")
-        .then((response) => {
-          this.$store.commit("storeTodos", response.data);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+    setTimeout(() => {
+      this.$store.dispatch("fetchTodos");
+      this.loading = false;
     }, 1000);
   },
 };
