@@ -14,33 +14,18 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
+import { useStore } from "vuex";
 import TodoSpinner from "@/components/TodoSpinner.vue";
 import TodoFormAdd from "@/components/TodoFormAdd.vue";
 import TodoItems from "@/components/TodoItems.vue";
-import TodoEmpty from "./components/TodoEmpty.vue";
-import axios from "axios";
+import TodoEmpty from "@/components/TodoEmpty.vue";
 
-export default {
-  components: {
-    TodoSpinner,
-    TodoFormAdd,
-    TodoItems,
-    TodoEmpty,
-  },
+const loading = ref(true);
+const store = useStore();
 
-  data() {
-    return {
-      loading: false,
-    };
-  },
-
-  created() {
-    this.loading = true;
-    setTimeout(() => {
-      this.$store.dispatch("fetchTodos");
-      this.loading = false;
-    }, 1000);
-  },
-};
+store.dispatch("fetchTodos").then(() => {
+  loading.value = false;
+});
 </script>

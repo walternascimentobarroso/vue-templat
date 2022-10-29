@@ -19,24 +19,21 @@
   </form>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      title: "",
-    };
-  },
-  methods: {
-    handleSubmit() {
-      if (!this.title) {
-        return false;
-      }
-      this.$store.dispatch("addTodo", {
-        title: this.title,
-        completed: false,
-      });
-      this.title = "";
-    },
-  },
+<script setup>
+import { ref } from "vue";
+import { useStore } from "vuex";
+
+const title = ref("");
+const store = useStore();
+
+const handleSubmit = () => {
+  if (!title.value) {
+    return false;
+  }
+  store.dispatch("addTodo", {
+    title: title.value,
+    completed: false,
+  });
+  title.value = "";
 };
 </script>

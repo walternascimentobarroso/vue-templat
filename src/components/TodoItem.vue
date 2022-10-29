@@ -66,39 +66,38 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "TodoItem",
-  props: {
-    todo: {
-      type: Object,
-      default: () => ({}),
-    },
+<script setup>
+import { ref } from "vue";
+import { useStore } from "vuex";
+
+const props = defineProps({
+  todo: {
+    type: Object,
+    default: () => ({}),
   },
-  data() {
-    return {
-      title: this.todo.title,
-      isCompleted: this.todo.completed,
-    };
-  },
-  methods: {
-    updateTodo() {
-      if (!this.title) return;
-      this.$store.dispatch("updateTodo", {
-        id: this.todo.id,
-        payload: {
-          title: this.title,
-          completed: this.isCompleted,
-        },
-      });
+});
+
+const title = ref(props.todo.title);
+const isCompleted = ref(props.todo.completed);
+const store = useStore();
+
+const toggleCompleted = () => {
+  isCompleted.value = !isCompleted.value;
+  updateTodo();
+};
+
+const updateTodo = () => {
+  if (!title.value) return;
+  store.dispatch("updateTodo", {
+    id: props.todo.id,
+    payload: {
+      title: title.value,
+      completed: isCompleted.value,
     },
-    toggleCompleted() {
-      this.isCompleted = !this.isCompleted;
-      this.updateTodo();
-    },
-    onDelete() {
-      this.$store.dispatch("deleteTodo", this.todo.id);
-    },
-  },
+  });
+};
+
+const onDelete = () => {
+  store.dispatch("deleteTodo", props.todo.id);
 };
 </script>
