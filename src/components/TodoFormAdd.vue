@@ -28,6 +28,9 @@ export default {
   },
   methods: {
     handleSubmit() {
+      if (!this.title) {
+        return false;
+      }
       this.$store.dispatch("addTodo", {
         title: this.title,
         completed: false,
